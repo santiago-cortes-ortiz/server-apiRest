@@ -7,11 +7,9 @@ import com.jeisson.server.service.ServerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
 
@@ -31,8 +29,8 @@ public class ServerResource {
                         .timeStamp(now())
                         .statusCode(HttpStatus.OK.value())
                         .httpStatus(HttpStatus.OK)
-                        .message("Servers retrieved")
                         .data(Map.of("servers",serverService.list(30)))
+                        .message("Servers retrieved")
                         .build()
         );
     }
@@ -45,8 +43,35 @@ public class ServerResource {
                         .timeStamp(now())
                         .statusCode(HttpStatus.OK.value())
                         .httpStatus(HttpStatus.OK)
-                        .message(server.getStatus() == Status.SERVER_UP ? "Ping success":"Ping failed")
                         .data(Map.of("server",server))
+                        .message(server.getStatus() == Status.SERVER_UP ? "Ping success":"Ping failed")
+                        .build()
+        );
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Response> saveServer(@RequestBody @Valid Server server) {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .statusCode(HttpStatus.CREATED.value())
+                        .httpStatus(HttpStatus.CREATED)
+                        .data(Map.of("server",serverService.create(server)))
+                        .message("Server created")
+                        .build()
+        );
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Response> getServer(@PathVariable("id") Long id) {
+        Server server = serverService.get(id);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .statusCode(HttpStatus.OK.value())
+                        .httpStatus(HttpStatus.OK)
+                        .data(Map.of("server",server))
+                        .message("Server retrieved")
                         .build()
         );
     }
