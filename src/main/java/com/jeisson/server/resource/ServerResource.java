@@ -15,7 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static com.jeisson.server.enumeration.Status.SERVER_UP;
 import static java.time.LocalDateTime.now;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @RestController
@@ -30,8 +32,8 @@ public class ServerResource {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .statusCode(HttpStatus.OK.value())
-                        .httpStatus(HttpStatus.OK)
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
                         .data(Map.of("servers",serverService.list(30)))
                         .message("Servers retrieved")
                         .build()
@@ -44,10 +46,10 @@ public class ServerResource {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .statusCode(HttpStatus.OK.value())
-                        .httpStatus(HttpStatus.OK)
-                        .data(Map.of("server",server))
-                        .message(server.getStatus() == Status.SERVER_UP ? "Ping success":"Ping failed")
+                        .data(Map.of("server", server))
+                        .message(server.getStatus() == SERVER_UP ? "Ping success" : "Ping failed")
+                        .httpStatus(OK)
+                        .statusCode(OK.value())
                         .build()
         );
     }
@@ -71,8 +73,8 @@ public class ServerResource {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .statusCode(HttpStatus.OK.value())
-                        .httpStatus(HttpStatus.OK)
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
                         .data(Map.of("server",server))
                         .message("Server retrieved")
                         .build()
@@ -84,8 +86,8 @@ public class ServerResource {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .statusCode(HttpStatus.OK.value())
-                        .httpStatus(HttpStatus.OK)
+                        .statusCode(OK.value())
+                        .httpStatus(OK)
                         .data(Map.of("deleted",serverService.delete(id)))
                         .message("Server deleted")
                         .build()
@@ -94,7 +96,7 @@ public class ServerResource {
 
     @GetMapping(path = "/image/{fileName}", produces = IMAGE_PNG_VALUE)
     public byte[] getServerImage(@PathVariable("fileName") String fileName) throws IOException {
-        return Files.readAllBytes(Paths.get(System.getProperty("user.home")+ "Descargas/images/"+fileName));
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home")+ "/Downloads/images/"+fileName));
     }
 
 

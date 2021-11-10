@@ -16,6 +16,8 @@ import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Random;
 
+import static com.jeisson.server.enumeration.Status.SERVER_DOWN;
+import static com.jeisson.server.enumeration.Status.SERVER_UP;
 import static java.lang.Boolean.TRUE;
 
 @Service
@@ -35,10 +37,10 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server ping(String ipAddress) throws IOException {
-        log.info("Saving ping IP: {}",ipAddress);
+        log.info("Pinging server IP: {}", ipAddress);
         Server server = serverRepository.findByIpAddress(ipAddress);
         InetAddress address = InetAddress.getByName(ipAddress);
-        server.setStatus(address.isReachable(10000) ? Status.SERVER_UP : Status.SERVER_DOWN);
+        server.setStatus(address.isReachable(10000) ? SERVER_UP : SERVER_DOWN);
         serverRepository.save(server);
         return server;
     }
