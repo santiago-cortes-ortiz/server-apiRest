@@ -1,6 +1,5 @@
 package com.jeisson.server.service.implementation;
 
-import com.jeisson.server.enumeration.Status;
 import com.jeisson.server.model.Server;
 import com.jeisson.server.repository.ServerRepository;
 import com.jeisson.server.service.ServerService;
